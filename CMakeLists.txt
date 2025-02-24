@@ -15,7 +15,10 @@ find_package(mavros_msgs REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(global_position_sub src/global_position_sub.cpp)
+add_executable(global_position_sub 
+src/global_position_sub.cpp
+lib/file_writer.cpp
+)
 
 ament_target_dependencies(global_position_sub
   "rclcpp"
@@ -25,6 +28,7 @@ ament_target_dependencies(global_position_sub
 
 target_include_directories(global_position_sub PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/path_planner/lib>
   $<INSTALL_INTERFACE:include>)
 target_compile_features(global_position_sub PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
