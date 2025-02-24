@@ -1,13 +1,14 @@
 #include <cstdio>
+#include <iostream>
+#include "file_writer.h"
 #include <rclcpp/rclcpp.hpp>
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
-
 
 class GlobalPositionSub : public rclcpp::Node
 {
   public:
     GlobalPositionSub()
-    : Node("global_position_sub")
+    : Node("global_position_sub"), fw_("/home/parallels/ros2_ws/src/path_planner/tests", ":")
     {
       auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).best_effort();
       
@@ -18,11 +19,18 @@ class GlobalPositionSub : public rclcpp::Node
     }
 
   private:
-    void globalPositionCallback(const sensor_msgs::msg::NavSatFix::SharedPtr msg) const
+    void globalPositionCallback(const sensor_msgs::msg::NavSatFix::SharedPtr msg)
     {
-      RCLCPP_INFO(this->get_logger(), "Latitude: %f, Longitude: %f", msg->latitude, msg->longitude);
+      RCLCPP_INFO(this->get_logger(), "globalPositionCallback: MESSAGE RECEIVED");
+      std::ostringstream ss;
+      // increase precision, decimal places were lost without std::fixed and std::setprecision
+      ss << std::fixed << std::setprecision(10) << msg->latitude << "," << msg->longitude;
+      const std::string lat_long_str = ss.str();
+      fw_.writeToFile(lat_long_str);
     }
     rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr global_position_sub_;
+
+    FileWriter fw_;
 };
 
 int main(int argc, char * argv[])
