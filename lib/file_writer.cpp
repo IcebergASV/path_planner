@@ -10,8 +10,7 @@
 
 namespace fs = std::filesystem;
 
-FileWriter::FileWriter(const std::string& base_directory, const std::string& delimiter)
-    : delimiter_(delimiter) 
+FileWriter::FileWriter(const std::string& base_directory)
 {
     // Get the current date to create the directory
     std::string date = getCurrentDate();
@@ -23,13 +22,16 @@ FileWriter::FileWriter(const std::string& base_directory, const std::string& del
     }
 
     // Generate the file name using current date and time
-    file_path_ = directory_path_ + "/" + getCurrentDateTime() + ".txt";
+    file_path_ = directory_path_ + "/" + getCurrentDateTime() + ".csv";
 
     // Open the file for writing
-    file_.open(file_path_, std::ios::out | std::ios::app);
+    file_.open(file_path_, std::ios::out);
     if (!file_) {
         throw std::ios_base::failure("Failed to open file: " + file_path_);
     }
+
+    // Write the CSV headers
+    file_ << "latitude,longitude" << std::endl;
 }
 
 FileWriter::~FileWriter()
@@ -39,10 +41,11 @@ FileWriter::~FileWriter()
     }
 }
 
-void FileWriter::writeToFile(const std::string& data)
+void FileWriter::writeToFile(const LatLong& latlong)
 {
     if (file_.is_open()) {
-        file_ << data << delimiter_;
+        std::cout << "latitude: " << latlong.latitude << "\n";
+        file_ << std::fixed << std::setprecision(8) << latlong.latitude << "," << latlong.longitude << std::endl;
     } else {
         std::cerr << "File is not open!" << std::endl;
     }
