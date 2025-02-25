@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <iostream>
-#include <file_writer.h>
+#include <csv_writer.h>
 #include <lat_long.h>
 #include <rclcpp/rclcpp.hpp>
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
@@ -9,7 +9,7 @@ class GlobalPositionSub : public rclcpp::Node
 {
   public:
     GlobalPositionSub()
-    : Node("global_position_sub"), fw_("/home/parallels/repos/path_planning_tool/csv_data")
+    : Node("global_position_sub"), csv_w_("/home/parallels/repos/path_planning_tool/csv_data")
     {
       auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).best_effort();
       
@@ -24,11 +24,11 @@ class GlobalPositionSub : public rclcpp::Node
     {
       RCLCPP_INFO(this->get_logger(), "globalPositionCallback: MESSAGE RECEIVED");
       const LatLong lat_long(msg->latitude, msg->longitude);
-      fw_.writeToFile(lat_long);
+      csv_w_.writeToFile(lat_long);
     }
     rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr global_position_sub_;
 
-    FileWriter fw_;
+    CSVWriter csv_w_;
 };
 
 int main(int argc, char * argv[])

@@ -17,7 +17,7 @@ find_package(mavros_msgs REQUIRED)
 
 add_executable(global_position_sub 
 src/global_position_sub.cpp
-lib/file_writer.cpp
+lib/csv_writer.cpp
 )
 
 ament_target_dependencies(global_position_sub

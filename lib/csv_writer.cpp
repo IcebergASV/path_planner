@@ -6,11 +6,11 @@
 #include <sstream>
 #include <iomanip>
 #include <filesystem>
-#include "../include/path_planner/lib/file_writer.h"
+#include <csv_writer.h>
 
 namespace fs = std::filesystem;
 
-FileWriter::FileWriter(const std::string& base_directory)
+CSVWriter::CSVWriter(const std::string& base_directory)
 {
     // Get the current date to create the directory
     std::string date = getCurrentDate();
@@ -34,14 +34,14 @@ FileWriter::FileWriter(const std::string& base_directory)
     file_ << "latitude,longitude" << std::endl;
 }
 
-FileWriter::~FileWriter()
+CSVWriter::~CSVWriter()
 {
     if (file_.is_open()) {
         file_.close();
     }
 }
 
-void FileWriter::writeToFile(const LatLong& latlong)
+void CSVWriter::writeToFile(const LatLong& latlong)
 {
     if (file_.is_open()) {
         std::cout << "latitude: " << latlong.latitude << "\n";
@@ -51,7 +51,7 @@ void FileWriter::writeToFile(const LatLong& latlong)
     }
 }
 
-std::string FileWriter::getCurrentDate() {
+std::string CSVWriter::getCurrentDate() {
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
@@ -61,7 +61,7 @@ std::string FileWriter::getCurrentDate() {
     return std::string(buf);
 }
 
-std::string FileWriter::getCurrentDateTime() {
+std::string CSVWriter::getCurrentDateTime() {
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
 

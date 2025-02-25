@@ -1,15 +1,15 @@
-#ifndef FILE_WRITER_H
-#define FILE_WRITER_H
+#ifndef CSV_WRITER_H
+#define CSV_WRITER_H
 
 #include <string>
 #include <fstream>
 #include <lat_long.h>
 
-class FileWriter {
+class CSVWriter {
 public:
-    FileWriter() = delete; //prevent usage of default constructor
-    FileWriter(const std::string& base_directory);
-    ~FileWriter();
+    CSVWriter() = delete; //prevent usage of default constructor
+    CSVWriter(const std::string& base_directory);
+    ~CSVWriter();
     void writeToFile(const LatLong& latlong);
 
 private:
@@ -20,4 +20,4 @@ private:
     std::string getCurrentDateTime();
 };
 
-#endif // FILE_WRITER_H
+#endif // CSV_WRITER_H
