@@ -25,7 +25,13 @@ ament_target_dependencies(global_position_sub
   "mavros_msgs"
   "sensor_msgs"
 )
+add_executable(state_changer
+  src/state_changer.cpp)
 
+ament_target_dependencies(state_changer
+  "rclcpp"
+  "mavros_msgs"
+)
 target_include_directories(global_position_sub PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/path_planner/lib>
@@ -33,6 +39,9 @@ target_include_directories(global_position_sub PUBLIC
 target_compile_features(global_position_sub PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
 install(TARGETS global_position_sub
+  DESTINATION lib/${PROJECT_NAME})
+
+install(TARGETS state_changer
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
