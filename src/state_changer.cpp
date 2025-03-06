@@ -34,19 +34,18 @@ class StateChanger : public rclcpp::Node
     {
         auto request = std::make_shared<mavros_msgs::srv::SetMode::Request>();
         request->custom_mode = "GUIDED";
-        auto future = mode_change_client_->async_send_request(request);
-        try 
-        {
-            auto response = future.get();
-            if (response->mode_sent) {
-                RCLCPP_INFO(this->get_logger(), "changeModeToGuidedRequest: Successfully set mode to GUIDED");
-            } else {
-                RCLCPP_WARN(this->get_logger(), "changeModeToGuidedRequest: Failed to set mode: GUIDED");
-            }
-        } 
-        catch (const std::exception& e) {
-            RCLCPP_ERROR(this->get_logger(), "changeModeToGuidedRequest: Service call failed: %s", e.what());
-        }
+        auto future = mode_change_client_->async_send_request(request, 
+            [this](rclcpp::Client<mavros_msgs::srv::SetMode>::SharedFuture response) {
+                try {
+                    if (response.get()->mode_sent) {
+                        RCLCPP_INFO(this->get_logger(), "Successfully set mode to GUIDED");
+                    } else {
+                        RCLCPP_WARN(this->get_logger(), "Failed to set mode to GUIDED");
+                    }
+                } catch (const std::exception& e) {
+                    RCLCPP_ERROR(this->get_logger(), "Service call failed: %s", e.what());
+                }
+            });
     }
   private:
     void stateCallback(const mavros_msgs::msg::State::SharedPtr msg)
