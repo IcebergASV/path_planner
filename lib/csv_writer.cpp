@@ -41,11 +41,17 @@ CSVWriter::~CSVWriter()
     }
 }
 
-void CSVWriter::writeToFile(const LatLong& latlong)
+void CSVWriter::writeToFile(const LatLong& latlong, const std::string& mode)
 {
     if (file_.is_open()) {
-        std::cout << "latitude: " << latlong.latitude << "\n";
-        file_ << std::fixed << std::setprecision(8) << latlong.latitude << "," << latlong.longitude << std::endl;
+        std::cout << "latitude: " << latlong.latitude 
+                  << ", longitude: " << latlong.longitude
+                  << ", mode: " << mode << "\n";
+
+        file_ << std::fixed << std::setprecision(8) 
+              << latlong.latitude << "," 
+              << latlong.longitude << "," 
+              << mode << std::endl;
     } else {
         std::cerr << "File is not open!" << std::endl;
     }

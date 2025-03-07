@@ -10,7 +10,7 @@ public:
     CSVWriter() = delete; //prevent usage of default constructor
     CSVWriter(const std::string& base_directory);
     ~CSVWriter();
-    void writeToFile(const LatLong& latlong);
+    void writeToFile(const LatLong& latlong, const std::string& mode);
 
 private:
     std::string directory_path_;
